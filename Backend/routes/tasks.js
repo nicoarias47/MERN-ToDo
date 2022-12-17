@@ -1,24 +1,74 @@
 const { Router } = require("express");
-const { getTasks } = require("../controllers/tasks");
+const { check } = require("express-validator");
+const {
+  getAllTasks,
+  createTask,
+  getOneTask,
+  createSubTask,
+  deleteTasks,
+  completeTask,
+} = require("../controllers/tasks");
+
+const {
+  existIdInDb,
+  existTask,
+  existSubTask,
+} = require("../helpers/dbValidations");
+const { validationField } = require("../middlewares/validation-field");
+const { isValidTypeID } = require("../middlewares/dbValidatios");
 
 const router = Router();
 
-router.get("/", getTasks);
+router.get("/", getAllTasks);
 
-router.post("/", (req, res) => {
-  res.json({ msg: "Hello world - CREATE TASK" });
-});
+router.post(
+  "/",
+  [check("title", "The title is required").not().isEmpty(), validationField],
+  createTask
+);
 
-router.post("/:id/sub-task", (req, res) => {
-  res.json({ msg: "Hello world - CREATE SUB TASK" });
-});
+router.get(
+  "/:type/:id",
+  [
+    check("id", "ID is required").not().isEmpty(),
+    check("id", "Is not a valid ID of Mongo").isMongoId(),
+    isValidTypeID,
+    validationField,
+  ],
+  getOneTask
+);
 
-router.delete("/:id", (req, res) => {
-  res.json({ msg: "Hello world - DELETE TASK" });
-});
+router.post(
+  "/:id/subtask",
+  [
+    check("id", "ID is required").not().isEmpty(),
+    check("id", "Is not a valid ID of Mongo").isMongoId(),
+    check("id").custom(existTask),
+    validationField,
+  ],
+  createSubTask
+);
 
-router.put("/:category/:id", (req, res) => {
-  res.json({ msg: "Hello world - COMPLETE/UNCOMPLETE  TASK/SUBTASK" });
-});
+router.delete(
+  "/:type/:id",
+  [
+    check("id", "ID is required").not().isEmpty(),
+    check("id", "Is not a valid ID of Mongo").isMongoId(),
+    isValidTypeID,
+    validationField,
+  ],
+  deleteTasks
+);
+
+router.put(
+  "/:type/:id",
+  [
+    check("id", "ID is required").not().isEmpty(),
+    check("id", "Is not a valid ID of Mongo").isMongoId(),
+    isValidTypeID,
+    validationField,
+  ],
+  completeTask
+);
 
 module.exports = router;
