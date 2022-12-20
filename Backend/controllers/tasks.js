@@ -69,6 +69,7 @@ const createSubTask = async (req, res) => {
   const data = {
     ...body,
     creationDate: new Date().toLocaleString(),
+    mother: id,
   };
 
   const [newSubTask, { subTasks }] = await Promise.all([
@@ -98,8 +99,8 @@ const deleteTasks = async (req, res) => {
 
     case "subtask":
       deleteSubTask(id);
-      //const subTask = await SubTask.findByIdAndDelete(id);
-      return res.json({ msg: "subtask_delete" });
+      const subTask = await SubTask.findByIdAndDelete(id);
+      return res.json({ task_delete: subTask });
 
     default:
       return res.json({
@@ -109,6 +110,7 @@ const deleteTasks = async (req, res) => {
 };
 
 const completeTask = (req, res) => {
+  // --SEGUIR ACA--
   res.json({ msg: "Hello world - COMPLETE/UNCOMPLETE  TASK/SUBTASK" });
 };
 

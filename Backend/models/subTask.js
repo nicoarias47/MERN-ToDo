@@ -32,6 +32,12 @@ const subTaskSchema = Schema({
     default: false,
     required: true,
   },
+
+  mother: {
+    type: Schema.Types.ObjectId,
+    ref: "Task",
+    required: true,
+  },
 });
 
 subTaskSchema.methods.toJSON = function () {

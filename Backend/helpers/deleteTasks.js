@@ -11,15 +11,23 @@ const deleteTask = async (id) => {
   for (const task of subTasks) {
     await SubTask.findByIdAndDelete(task._id);
   }
+  return;
 };
 
 // constinuar, debemos buscar la subtask dentro de la task madre y eliminarla
 const deleteSubTask = async (id) => {
-  const task = await Task.find();
+  const { mother } = await SubTask.findById(id);
+  const { subTasks } = await Task.findById(mother);
 
-  //   task.map(({ subTasks }) => {
-  //     subTasks.map(({ _id }) => {});
-  //   });
+  const newTask = subTasks.filter((el) => el._id.toString() !== id);
+
+  const task = await Task.findByIdAndUpdate(
+    mother,
+    { subTasks: newTask },
+    { new: true }
+  );
+
+  return;
 };
 
 module.exports = { deleteTask, deleteSubTask };
