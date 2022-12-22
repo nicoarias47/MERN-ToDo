@@ -9,20 +9,16 @@ const {
   completeTask,
 } = require("../controllers/tasks");
 
-const {
-  existIdInDb,
-  existTask,
-  existSubTask,
-} = require("../helpers/dbValidations");
+const { existTask } = require("../helpers");
 const { validationField } = require("../middlewares/validation-field");
 const { isValidTypeID } = require("../middlewares/dbValidatios");
 
 const router = Router();
 
-router.get("/", getAllTasks);
+router.get("/tasks", getAllTasks);
 
 router.post(
-  "/",
+  "/tasks",
   [check("title", "The title is required").not().isEmpty(), validationField],
   createTask
 );
@@ -39,7 +35,7 @@ router.get(
 );
 
 router.post(
-  "/:id/subtask",
+  "/subtasks/:id",
   [
     check("id", "ID is required").not().isEmpty(),
     check("id", "Is not a valid ID of Mongo").isMongoId(),

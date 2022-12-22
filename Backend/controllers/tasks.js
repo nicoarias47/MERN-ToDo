@@ -1,7 +1,12 @@
 const { response } = require("express");
 const SubTask = require("../models/subTask");
 const Task = require("../models/task");
-const { deleteTask, deleteSubTask } = require("../helpers/deleteTasks");
+const {
+  deleteTask,
+  deleteSubTask,
+  isComplete,
+  isCompleteSubTask,
+} = require("../helpers");
 
 const getAllTasks = async (req, res = response) => {
   const { until = 10, from = 0 } = req.query;
@@ -109,9 +114,36 @@ const deleteTasks = async (req, res) => {
   }
 };
 
-const completeTask = (req, res) => {
-  // --SEGUIR ACA--
-  res.json({ msg: "Hello world - COMPLETE/UNCOMPLETE  TASK/SUBTASK" });
+const completeTask = async (req, res) => {
+  const { id, type } = req.params;
+
+  switch (type) {
+    case "task":
+      const complete = await isComplete(id, type);
+
+      const task = await Task.findByIdAndUpdate(
+        id,
+        { complete },
+        { new: true }
+      );
+      return res.json({ task });
+
+    case "subtask":
+      const result = await isComplete(id, type);
+      isCompleteSubTask(id, result);
+      const subTask = await SubTask.findByIdAndUpdate(
+        id,
+        { complete: result },
+        { new: true }
+      );
+
+      return res.json({ subTask });
+
+    default:
+      return res.json({
+        msg: "invalid type, choice: task or subtask",
+      });
+  }
 };
 
 module.exports = {
