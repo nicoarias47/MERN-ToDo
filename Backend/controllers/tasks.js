@@ -52,18 +52,20 @@ const getOneTask = async (req, res = response) => {
   const { id, type } = req.params;
 
   switch (type) {
-    case "task":
+    case "task": {
       const task = await Task.findById(id);
       return res.json({ task });
+    }
 
-    case "subtask":
+    case "subtask": {
       const subTask = await SubTask.findById(id);
       return res.json({ subTask });
-
-    default:
+    }
+    default: {
       return res.json({
         msg: "invalid type, choice: task or subtask",
       });
+    }
   }
 };
 
@@ -97,20 +99,22 @@ const deleteTasks = async (req, res) => {
   const { id, type } = req.params;
 
   switch (type) {
-    case "task":
+    case "task": {
       deleteTask(id);
       const task = await Task.findByIdAndDelete(id);
       return res.json({ task_delete: task });
+    }
 
-    case "subtask":
+    case "subtask": {
       deleteSubTask(id);
       const subTask = await SubTask.findByIdAndDelete(id);
       return res.json({ task_delete: subTask });
-
-    default:
+    }
+    default: {
       return res.json({
         msg: "invalid type, choice: task or subtask",
       });
+    }
   }
 };
 
@@ -118,7 +122,7 @@ const completeTask = async (req, res) => {
   const { id, type } = req.params;
 
   switch (type) {
-    case "task":
+    case "task": {
       const complete = await isComplete(id, type);
 
       const task = await Task.findByIdAndUpdate(
@@ -127,8 +131,9 @@ const completeTask = async (req, res) => {
         { new: true }
       );
       return res.json({ task });
+    }
 
-    case "subtask":
+    case "subtask": {
       const result = await isComplete(id, type);
       isCompleteSubTask(id, result);
       const subTask = await SubTask.findByIdAndUpdate(
@@ -138,11 +143,13 @@ const completeTask = async (req, res) => {
       );
 
       return res.json({ subTask });
+    }
 
-    default:
+    default: {
       return res.json({
         msg: "invalid type, choice: task or subtask",
       });
+    }
   }
 };
 
