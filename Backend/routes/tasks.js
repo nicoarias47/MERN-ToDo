@@ -67,4 +67,10 @@ router.put(
   completeTask
 );
 
+router.get("/test", (req, res) => {
+  res.json({
+    msg: "Holis test",
+  });
+});
+
 module.exports = router;

@@ -36,6 +36,10 @@ class Server {
       console.log(`App listen on port ${this.port}`);
     });
   }
+
+  async getapp() {
+    return this.app;
+  }
 }
 
 module.exports = Server;

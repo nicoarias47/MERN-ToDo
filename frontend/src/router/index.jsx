@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import LayoutPublic from "../layout/LayoutPublic";
 import Home from "../views/Home";
-import Task from "../views/Task";
-import SubTask from "../views/SubTask";
 import NotFound from "../views/NotFound";
+import CreateList from "../components/CreateList";
+import TaskContainer from "../components/TaskContainer";
+import CreateSubTask from "../components/CreateTask";
 
 export const router = createBrowserRouter([
   {
@@ -16,12 +17,16 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/task",
-        element: <Task />,
+        path: "/create_task",
+        element: <CreateList />,
       },
       {
-        path: "/subtask",
-        element: <SubTask />,
+        path: "/:idSubtask",
+        element: <TaskContainer />,
+      },
+      {
+        path: "/:idTask",
+        element: <CreateSubTask />,
       },
     ],
   },
