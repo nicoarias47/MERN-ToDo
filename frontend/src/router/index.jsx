@@ -17,15 +17,15 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/create_task",
+        path: "/create_list",
         element: <CreateList />,
       },
       {
-        path: "/:idSubtask",
+        path: "/:idList",
         element: <TaskContainer />,
       },
       {
-        path: "/:idTask",
+        path: "/:idList/create_task",
         element: <CreateSubTask />,
       },
     ],

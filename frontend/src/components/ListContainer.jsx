@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Api from "../helpers/api";
 import ListItem from "./ListItem";
 import TopMenu from "./TopMenu";
@@ -16,10 +17,8 @@ const TaskContainer = () => {
   };
 
   useEffect(() => {
-    const url = "http://localhost:8080";
-
     const getList = async () => {
-      await Api.getList(url).then((resp) => setList(resp));
+      await Api.getAllLists(0, 10).then((resp) => setList(resp));
     };
 
     getList();
@@ -49,9 +48,11 @@ const TaskContainer = () => {
               ))}
           </section>
         </div>
-        <section className="flex flex-row gap-2">
-          <p>➕</p>
-          <p>Add list</p>
+        <section className="gap-2">
+          <Link to="/create_list" className="flex flex-row ">
+            <p>➕</p>
+            <p>Add list</p>
+          </Link>
         </section>
       </div>
     </div>
