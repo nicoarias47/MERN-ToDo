@@ -21,7 +21,7 @@ const CreateTask = () => {
       navigate("/");
     };
 
-    const listCreated = await Api.createList(form, onSucces);
+    await Api.createList(form, onSucces);
   };
 
   return (

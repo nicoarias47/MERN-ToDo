@@ -38,7 +38,6 @@ class Api {
     }
   }
 
-  // Valid type: "task", "subtask"
   static async getListOrTask(type, id, onSucces = null) {
     if (!types.includes(type)) {
       return console.error(`The types valid are ${types}`);
@@ -55,7 +54,6 @@ class Api {
     }
   }
 
-  // todo: test
   static async createTask(body, id, onSucces = null) {
     const requestOptions = {
       method: "POST",
@@ -72,6 +70,50 @@ class Api {
       return data;
     } catch (error) {
       console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  static async completeTask(type, id, onSucces = null) {
+    if (!types.includes(type)) {
+      return console.error(`The types valid are ${types}`);
+    }
+
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    try {
+      const resp = await fetch(`${URL}/api/v1/${type}/${id}`, requestOptions);
+      const data = await resp.json();
+
+      if (onSucces) onSucces();
+
+      return data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  static async deleteOne(type, id, onSucces = null) {
+    if (!types.includes(type)) {
+      return console.error(`The types valid are ${types}`);
+    }
+
+    const requestOptions = {
+      method: "DEL",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    try {
+      const resp = await fetch(`${URL}/api/v1/${type}/${id}`, requestOptions);
+      const data = await resp.json();
+
+      if (onSucces) onSucces();
+
+      return data;
+    } catch (error) {
       throw new Error(error);
     }
   }

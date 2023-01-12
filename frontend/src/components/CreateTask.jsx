@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Api from "../helpers/api";
 
 const initialForm = {
   title: "",
@@ -11,14 +13,20 @@ const CreateSubTask = () => {
   const [form, setForm] = useState(initialForm);
   const { idList } = useParams();
 
+  const navigate = useNavigate();
+
   const handleChange = ({ target: { value, name } }) => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // --TODO:--
-    // funcion para crear tarea
+
+    const onSucces = () => {
+      navigate("/");
+    };
+
+    await Api.createTask(form, idList, onSucces);
   };
 
   return (
